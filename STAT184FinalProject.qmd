@@ -13,7 +13,26 @@ Quarto enables you to weave together content and executable code into a finished
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
 ```{r}
-1 + 1
+library(readr)
+library(dplyr)
+library(ggplot2)
+recentGrads <- read_csv("https://raw.githubusercontent.com/DJH6655/STAT184-Final-Project/refs/heads/main/recent-grads.csv")
+majorCategories <- recentGrads %>%
+  filter(!is.na(Total)) %>%
+  group_by(Major_category) %>%
+  summarize(count = sum(Total),
+            avg_P25 = mean(P25th),
+            avg_med_sal = mean(Median),
+            avg_P75 = mean(P75th),
+            avg_umemp_rate = mean(Unemployment_rate))
+View(majorCategories)
+library(esquisse)
+esquisser(data = majorCategories, viewer = "browser")
+ggplot(recentGrads) +
+  aes(x = Low_wage_jobs/Total, y = Median) +
+  geom_point(colour = "#112446") +
+  geom_smooth(method = "lm", se = FALSE, colour = "#112446") +
+  theme_minimal()
 ```
 
 You can add options to executable code like this 
@@ -24,3 +43,6 @@ You can add options to executable code like this
 ```
 
 The `echo: false` option disables the printing of code (only output is displayed).
+
+```{r codeAppend, ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
+```
