@@ -1,22 +1,57 @@
 ---
-title: "STAT184 Final Project"
+title: "College Major Backgrounds and Effects"
 author: "Dylan Holliday and Max Collins"
-format: pdf
+date: "May 5, 2025"
+date-modified: now
+format: 
+  pdf:
+    embed-resources: true
+    number-sections: false
+    toc: false
+    fig-align: center
+    cap-location: top
+    link-external-newwindow: true
+execute: 
+  echo: false
+  warning: false
 ---
 
-## Quarto
+# Research Topic: College Majors
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+Our Research is focused on finding trends and insights from post-secondary majors: how one's socioeconomic status plays a role in their major, as well as their major's effect on their income after graduation. This is a topic of interest for our team because we are in college and are thus interested in how different majors contain different groups of people and how the choice of a college major can affect one's future career. Our analysis will focus on median salary, major categories (majors grouped within a similar field), unemployment rate, total amount of graduates, and the sex and race backgrounds of certain majors. We will explore these relationships using a series of data visualizations and provide insights on income and diversity trends of recent college graduates. Our underlying purpose is to expose societal trends that may be hindering diversity initiatives in order to become a basis for possible change.
 
-## Running Code
+# Research Questions
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+(Enter Research Questions Here)
+
+# Provenance of Our Data
+
+
 
 ```{r}
-1 + 1
+library(readr)
+library(dplyr)
+library(ggplot2)
+recentGrads <- read_csv("https://raw.githubusercontent.com/DJH6655/STAT184-Final-Project/refs/heads/main/recent-grads.csv")
+majorCategories <- recentGrads %>%
+  filter(!is.na(Total)) %>%
+  group_by(Major_category) %>%
+  summarize(count = sum(Total),
+            avg_P25 = mean(P25th),
+            avg_med_sal = mean(Median),
+            avg_P75 = mean(P75th),
+            avg_umemp_rate = mean(Unemployment_rate))
+View(majorCategories)
+library(esquisse)
+esquisser(data = majorCategories, viewer = "browser")
+ggplot(recentGrads) +
+  aes(x = Low_wage_jobs/Total, y = Median) +
+  geom_point(colour = "#112446") +
+  geom_smooth(method = "lm", se = FALSE, colour = "#112446") +
+  theme_minimal()
 ```
 
-You can add options to executable code like this 
+You can add options to executable code like this
 
 ```{r}
 #| echo: false
@@ -24,3 +59,6 @@ You can add options to executable code like this
 ```
 
 The `echo: false` option disables the printing of code (only output is displayed).
+
+```{r codeAppend, ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
+```
