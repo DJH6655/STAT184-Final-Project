@@ -18,7 +18,7 @@ execute:
 
 # Research Topic: College Majors
 
-Our Research is focused on finding trends and insights from post-secondary majors: how one's socioeconomic status plays a role in their major, as well as their major's effect on their income after graduation. This is a topic of interest for our team because we are in college and are thus interested in how different majors contain different groups of people and how the choice of a college major can affect one's future career. Our analysis will focus on median salary, major categories (majors grouped within a similar field), unemployment rate, total amount of graduates, and the sex and race backgrounds of certain majors. We will explore these relationships using a series of data visualizations and provide insights on income and diversity trends of recent college graduates. Our underlying purpose is to expose societal trends that may be hindering diversity initiatives in order to become a basis for possible change.
+Our Research is focused on finding trends and insights from post-secondary majors: how one's socioeconomic status plays a role in their major, as well as their major's effect on their income after graduation. This is a topic of interest for our team because we are in college and are thus interested in how different majors contain different groups of people and how the choice of a college major can affect one's future career. We will explore these relationships using a series of data visualizations and provide insights on income and diversity trends of recent college graduates. Our underlying purpose is to expose societal trends that may be hindering diversity initiatives in order to become a basis for possible change.
 
 # Research Questions
 
@@ -26,6 +26,12 @@ Our Research is focused on finding trends and insights from post-secondary major
 
 # Provenance of Our Data
 
+
+# FAIR and CARE Principles
+
+# Attribute Focus
+
+Our analysis will focus on median salary, major categories (majors grouped within a similar field), unemployment rate, total amount of graduates, and the sex and race backgrounds of certain majors.
 
 
 ```{r}
