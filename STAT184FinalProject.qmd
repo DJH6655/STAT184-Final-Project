@@ -22,7 +22,7 @@ Our Research is focused on finding trends and insights from post-secondary major
 
 # Research Questions
 
-(Enter Research Questions Here)
+Our first question we will explore is whether there is a significant difference in college race proportions compared to the national proportions. To do this, we intend to conduct a one sample proportion test comparing primarily the white proportion of college students to the national to expose a possible bias. 
 
 # Provenance of Our Data
 
@@ -32,7 +32,11 @@ Our Research is focused on finding trends and insights from post-secondary major
 
 Our analysis will focus on median salary, major categories (majors grouped within a similar field), unemployment rate, total amount of graduates, and the sex and race backgrounds of certain majors.
 
+# Analyses
+
 ```{r}
+### Read in data and format to appropriate data frames
+
 #1 Open Necessary Packages
 library(tidyr)
 library(readr)
@@ -54,23 +58,24 @@ recentGrads <- read_csv(
         "/STAT184-Final-Project/refs/heads/main/recent-grads.csv"))
 
 # Read in secondary data source
-sexRaceFreqRaw <- read_excel("Tab1_FOD (1).xlsx")
+sexRaceFreqRaw <- read_excel("SexRaceFrequency.xlsx")
 
 
 #3 Clean Excel Data, Selecting necessary attributes and renaming them
 sexRaceFrequency <- sexRaceFreqRaw %>% 
   slice_head(n=41) %>% 
   slice_tail(n = 37) %>% 
-  select(c(1,2,9,10,11,12,21,22)) %>% 
+  select(c(1,2,9,10,11,12,13,21,22)) %>% 
   rename(
     Major = 1,
     Total = 2,
     Race_White_Percent = 3, 
     Race_Black_Percent = 4,
     Race_Asian_Percent = 5,
-    Race_Hispanic_Percent= 6,
-    Poverty_Percent = 7,
-    Not_Poverty_Percent = 8
+    Race_Hispanic_Percent = 6,
+    Race_OtherMulti_Percent = 7,
+    Poverty_Percent = 8,
+    Not_Poverty_Percent = 9
   ) %>% 
   filter(!is.na(Total)) %>% 
   slice(c(-14,-20,-23)) %>% 
@@ -80,6 +85,7 @@ sexRaceFrequency <- sexRaceFreqRaw %>%
          Race_Black_Percent = as.numeric(Race_Black_Percent),
          Race_Asian_Percent = as.numeric(Race_Asian_Percent),
          Race_Hispanic_Percent = as.numeric(Race_Hispanic_Percent),
+         Race_OtherMulti_Percent = as.numeric(Race_OtherMulti_Percent),
          Poverty_Percent = as.numeric(Poverty_Percent),
          Not_Poverty_Percent = as.numeric(Not_Poverty_Percent)
          )
@@ -91,6 +97,7 @@ sexRaceCount <- sexRaceFrequency %>%
     Race_Black_Count = floor((Race_Black_Percent / 100)*Total),
     Race_Asian_Count = floor((Race_Asian_Percent / 100)*Total),
     Race_Hispanic_Count = floor((Race_Hispanic_Percent / 100)*Total),
+    Race_OtherMulti_Count = floor((Race_OtherMulti_Percent / 100)*Total),
     Poverty_Count = floor((Poverty_Percent / 100)*Total),
     Not_Poverty_Count = floor((Not_Poverty_Percent / 100)*Total)
   )
@@ -107,17 +114,17 @@ joinedTables <-
 majorCategories <- joinedTables %>% 
   group_by(Major_category) %>%
   summarize(
-    count = sum(Total.x),
-    avg_P25 = mean(P25th),
-    avg_med_sal = mean(Median),
-    avg_P75 = mean(P75th),
-    avg_umemp_rate = mean(Unemployment_rate),
-    White = floor(mean(Race_White_Count)),
-    Black = floor(mean(Race_Black_Count)),
-    Asian = floor(mean(Race_Asian_Count)),
-    Hispanic = floor(mean(Race_Hispanic_Count)),
-    poverty = floor(mean(Poverty_Count)),
-    not_poverty = floor(mean(Not_Poverty_Count))
+    "Count" = sum(Total.x),
+    "Average First Quartile" = mean(P25th),
+    "Average Median Salary" = mean(Median),
+    "Average Third Quartile" = mean(P75th),
+    "Average Unemployment Rate" = mean(Unemployment_rate),
+    "White Count" = floor(mean(Race_White_Count)),
+    "Black Count" = floor(mean(Race_Black_Count)),
+    "Asian Count" = floor(mean(Race_Asian_Count)),
+    "Hispanic Count" = floor(mean(Race_Hispanic_Count)),
+    "Other Count" = floor(mean(Race_OtherMulti_Count)),
+    "Poverty Count" = floor(mean(Poverty_Count))
   )
 
 
@@ -130,8 +137,8 @@ This analysis will try to determine if there is a statistically significant bias
 
 **Hypotheses**:  
 
-  $H_0$ : $p = p_0$ There is no significant difference in collegiate race proportions and national (population) race proportions.  
-  $H_a$ : $p \ne p_0)$ There exists a significant difference in proportions of race between college students and the national (population) average.  
+  $H_0$ : $p = p_0$ There is no significant difference in the white collegiate race proportion and national (population) white race proportion.  
+  $H_a$ : $p \ne p_0$ There exists a significant difference in the proportion of white people between college students and the national (population) average.  
   
 To start, we must find the proportion of white college students. The proportion lies in the table below.
 
@@ -142,7 +149,7 @@ Below is a table depicting the percent frequency of each race in each major cate
 
 #1 Select Necessary attributes and pivot longer
 freqTablePrep <- majorCategories %>%
-  select(1,7,8,9,10) %>%
+  select(1,7,8,9,10,11) %>%
   pivot_longer(!Major_category, names_to = "Race", values_to = "Count")
   
 #2 Use uncount to have a case be one individual
@@ -167,23 +174,25 @@ raceFreq %>%
   kable(
     caption = "Frequency of Each Major Category Based on Race",
     booktabs = TRUE,
-    align = "lrrrrr"
+    align = "lrrrrrr"
   ) 
 ```
 
-As one can tell, there is a clear disparity between the proportion of white students and the proportion of students of different races, with the total percentage of white college students being 67.25%. Another noteworthy finding is that 20.49% of Asian students have a major in the Computers and Mathematics Category, as opposed to just 8.13% of the whole collegiate population. This percentage can be obtained by taking the 2.5% of Asians in Computers & Mathematics and divide by the 12.2% of total Asian students in the collegiate population. This statistic tells us that Asians are more likely to have a major in Computers and Mathematics than the college population as a whole. Even still, everyone should avoid stereotyping so that all people have free choice to study whatever they choose.  
+As one can tell, there is a clear disparity between the proportion of white students and the proportion of students of different races, with the total percentage of white college students being 64.14%. Since we do not yet have the population proportion, no assumptions relating to our hypotheses can be made. 
 
-Back to our analysis, the college proportion of white students is 67.25%. Let's call this $p_0$. According to the US Census, 63.44% of the total United States population identifies as white. Let's call this $p$. According to the One Sample Proportion Z-Test:  
+Another noteworthy finding is that 20.46% of Asian students have a major in the Computers and Mathematics Category, as opposed to just 8.13% of the whole collegiate population. This percentage can be obtained by taking the 2.38% of Asians in Computers & Mathematics and divide by the 11.63% of total Asian students in the collegiate population. This statistic tells us that Asians are more likely to have a major in Computers and Mathematics than the college population as a whole. Even still, everyone should avoid stereotyping so that all people have free choice to study whatever they choose.  
+
+Back to our analysis, the college proportion of white students is 64.14%. Let's call this $p_0$. According to the US Census, 63.44% of the total United States population identifies as white. Let's call this $p$. According to the One Sample Proportion Z-Test:  
   
   $$z = \frac{p-p_0}{\sqrt{p_0(1-p_0)/n}}$$  
   
 Where $p_0$ is the white college students proportion, $p$ is the total white US population proportion, and $n$ is the total number of college students in the sample:  
- `r sum(majorCategories['count'])`
+ `r sum(majorCategories['Count'])`
  
 As such, our z value is calculated to be:
 
-$$ z = -471.27 $$
-Since our z value is so large, our p-value is 0, leading us to reject our null hypothesis. This leads us to believe there is a statistical difference in the proportion of white college students and the proportion of the US Population that is white.
+$$ z = -84.73 $$
+Since our z value is so large (in absolute value), our p-value is most nearly 0, leading us to reject our null hypothesis. This leads us to believe there is a statistical difference in the proportion of white college students and the proportion of the US Population that is white. There are faults with this analysis, however; since the college data came from the US Census as well, such a large "sample" size would indicate a difference in the smallest of proportions. Therefore, Any insights to be made from this test are rendered insignificant. Conducting tests on a smaller scale (such as a school by school basis) will help individual school leaders find if their school is meeting diversity standards.
 
 # Conclusions
 
