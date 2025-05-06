@@ -26,18 +26,19 @@ Our Research is focused on finding trends and insights from post-secondary major
 
 # Provenance of Our Data
 
-
 # FAIR and CARE Principles
 
 # Attribute Focus
 
 Our analysis will focus on median salary, major categories (majors grouped within a similar field), unemployment rate, total amount of graduates, and the sex and race backgrounds of certain majors.
 
-
 ```{r}
+#1 Open Necessary Packages
 library(readr)
 library(dplyr)
 library(ggplot2)
+
+#2 Read in data from url
 recentGrads <- read_csv("https://raw.githubusercontent.com/DJH6655/STAT184-Final-Project/refs/heads/main/recent-grads.csv")
 majorCategories <- recentGrads %>%
   filter(!is.na(Total)) %>%
@@ -47,9 +48,8 @@ majorCategories <- recentGrads %>%
             avg_med_sal = mean(Median),
             avg_P75 = mean(P75th),
             avg_umemp_rate = mean(Unemployment_rate))
-View(majorCategories)
-library(esquisse)
-esquisser(data = majorCategories, viewer = "browser")
+
+
 ggplot(recentGrads) +
   aes(x = Low_wage_jobs/Total, y = Median) +
   geom_point(colour = "#112446") +
@@ -57,8 +57,8 @@ ggplot(recentGrads) +
   theme_minimal()
 
 library(readxl)
-Tab1_FOD_1_ <- read_excel("Tab1_FOD (1).xlsx")
-View(Tab1_FOD_1_)
+Tab1_FOD_1_ <- read_excel("SexRaceFrequency.xlsx")
+
 
 Tab1_FOD_1_ <- Tab1_FOD_1_ %>% 
   slice_head(n=41) %>% 
@@ -67,20 +67,21 @@ Tab1_FOD_1_ <- Tab1_FOD_1_ %>%
   rename(
     Major = 1,
     Total = 2,
-    Race_White_Percent = 3, 
-    Race_Black_Percent = 4,
-    Race_Asian_Percent = 5,
-    Race_Hispanic_Percent= 6,
-    Poverty_Percent = 7,
-    Not_Poverty_Percent = 8
+    Race_White_Count = 3, 
+    Race_Black_Count = 4,
+    Race_Asian_Count = 5,
+    Race_Hispanic_Count= 6,
+    Poverty_Count = 7,
+    Not_Poverty_Count = 8
   ) %>% 
   filter(!is.na(Total)) %>% 
   slice(c(-14,-20,-23)) %>% 
   mutate(Major = toupper(Major))
 
-Tab1_FOD_1_ <- Tab1_FOD_1_ %>% 
+joinedTables <-
   inner_join(
-    recent_grads,
+    Tab1_FOD_1_,
+    recentGrads,
     by = join_by(Major == Major)
   ) %>% 
   mutate(
@@ -98,8 +99,8 @@ Tab1_FOD_1_ <- Tab1_FOD_1_ %>%
     Not_Poverty_Percent = as.numeric(Not_Poverty_Percent),
     Not_Poverty_Percent = (Not_Poverty_Percent / 100)*Total.x
   )
-
-major_Categories <- Tab1_FOD_1_ %>% 
+'''
+majorCategories <- joinedTables %>% 
   group_by(Major_category) %>%
   summarize(
     count = sum(Total.x) + sum(Total.y),
