@@ -20,9 +20,14 @@ Be sure to list where you got any data used within the project. Be sure to ackno
 
 ## Authors
 
-Dylan Holliday is majoring in Applied Data Science at Pennsylvania State University.
-Max Collins is majoring in Finance and Statistics at Pennsylvania State University.
+Dylan Holliday is majoring in Applied Data Science at Pennsylvania State University. Max Collins is majoring in Finance and Statistics at Pennsylvania State University.
 
 ### Contact:
 
-**Phone**: +1 (412) 874-1922 **Email**: [djh6655\@psu.edu](mailto:djh6655@psu.edu){.email}
+Dylan Holliday\
+**Phone**: +1 (412) 874-1922\
+**Email**: [djh6655\@psu.edu](mailto:djh6655@psu.edu){.email} 
+
+Max Collins\
+**Phone**: +1 (610) 844-2569\
+**Email**: [mjc7985\@psu.edu](mailto:mjc7985@psu.edu){.email}
