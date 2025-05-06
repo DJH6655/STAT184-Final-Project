@@ -1,4 +1,4 @@
-# Project Title
+# College Major Backgrounds and Effects
 
 Write a 1-2 sentences that quickly and clearly convey what your repo is for.
 
@@ -20,4 +20,14 @@ Be sure to list where you got any data used within the project. Be sure to ackno
 
 ## Authors
 
-Give information about who are the authors of the project and how people can get in touch if they have questions.
+Dylan Holliday is majoring in Applied Data Science at Pennsylvania State University. Max Collins is majoring in Finance and Statistics at Pennsylvania State University.
+
+### Contact:
+
+Dylan Holliday\
+**Phone**: +1 (412) 874-1922\
+**Email**: [djh6655\@psu.edu](mailto:djh6655@psu.edu){.email} 
+
+Max Collins\
+**Phone**: +1 (610) 844-2569\
+**Email**: [mjc7985\@psu.edu](mailto:mjc7985@psu.edu){.email}
