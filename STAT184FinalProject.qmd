@@ -18,7 +18,7 @@ execute:
 
 # Research Topic: College Majors
 
-Our Research is focused on finding trends and insights from post-secondary majors: how one's socioeconomic status plays a role in their major, as well as their major's effect on their income after graduation. This is a topic of interest for our team because we are in college and are thus interested in how different majors contain different groups of people and how the choice of a college major can affect one's future career. Our analysis will focus on median salary, major categories (majors grouped within a similar field), unemployment rate, total amount of graduates, and the sex and race backgrounds of certain majors. We will explore these relationships using a series of data visualizations and provide insights on income and diversity trends of recent college graduates. Our underlying purpose is to expose societal trends that may be hindering diversity initiatives in order to become a basis for possible change.
+Our Research is focused on finding trends and insights from post-secondary majors: how one's socioeconomic status plays a role in their major, as well as their major's effect on their income after graduation. This is a topic of interest for our team because we are in college and are thus interested in how different majors contain different groups of people and how the choice of a college major can affect one's future career. We will explore these relationships using a series of data visualizations and provide insights on income and diversity trends of recent college graduates. Our underlying purpose is to expose societal trends that may be hindering diversity initiatives in order to become a basis for possible change.
 
 # Research Questions
 
@@ -26,6 +26,12 @@ Our Research is focused on finding trends and insights from post-secondary major
 
 # Provenance of Our Data
 
+
+# FAIR and CARE Principles
+
+# Attribute Focus
+
+Our analysis will focus on median salary, major categories (majors grouped within a similar field), unemployment rate, total amount of graduates, and the sex and race backgrounds of certain majors.
 
 
 ```{r}
@@ -49,6 +55,66 @@ ggplot(recentGrads) +
   geom_point(colour = "#112446") +
   geom_smooth(method = "lm", se = FALSE, colour = "#112446") +
   theme_minimal()
+
+library(readxl)
+Tab1_FOD_1_ <- read_excel("Tab1_FOD (1).xlsx")
+View(Tab1_FOD_1_)
+
+Tab1_FOD_1_ <- Tab1_FOD_1_ %>% 
+  slice_head(n=41) %>% 
+  slice_tail(n = 37) %>% 
+  select(c(1,2,9,10,11,12,21,22)) %>% 
+  rename(
+    Major = 1,
+    Total = 2,
+    Race_White_Percent = 3, 
+    Race_Black_Percent = 4,
+    Race_Asian_Percent = 5,
+    Race_Hispanic_Percent= 6,
+    Poverty_Percent = 7,
+    Not_Poverty_Percent = 8
+  ) %>% 
+  filter(!is.na(Total)) %>% 
+  slice(c(-14,-20,-23)) %>% 
+  mutate(Major = toupper(Major))
+
+Tab1_FOD_1_ <- Tab1_FOD_1_ %>% 
+  inner_join(
+    recent_grads,
+    by = join_by(Major == Major)
+  ) %>% 
+  mutate(
+    Total.x = as.numeric(Total.x),
+    Race_White_Percent = as.numeric(Race_White_Percent),
+    Race_White_Percent = (Race_White_Percent / 100)*Total.x,
+    Race_Black_Percent = as.numeric(Race_Black_Percent),
+    Race_Black_Percent = (Race_Black_Percent / 100)*Total.x,
+    Race_Asian_Percent = as.numeric(Race_Asian_Percent),
+    Race_Asian_Percent = (Race_Asian_Percent / 100)*Total.x,
+    Race_Hispanic_Percent = as.numeric(Race_Hispanic_Percent),
+    Race_Hispanic_Percent = (Race_Hispanic_Percent / 100)*Total.x,
+    Poverty_Percent = as.numeric(Poverty_Percent),
+    Poverty_Percent = (Poverty_Percent / 100)*Total.x,
+    Not_Poverty_Percent = as.numeric(Not_Poverty_Percent),
+    Not_Poverty_Percent = (Not_Poverty_Percent / 100)*Total.x
+  )
+
+major_Categories <- Tab1_FOD_1_ %>% 
+  group_by(Major_category) %>%
+  summarize(
+    count = sum(Total.x) + sum(Total.y),
+    avg_P25 = mean(P25th),
+    avg_med_sal = mean(Median),
+    avg_P75 = mean(P75th),
+    avg_umemp_rate = mean(Unemployment_rate),
+    white_pct = sum(Race_White_Percent) / count,
+    black_pct = sum(Race_Black_Percent) / count,
+    asian_pct = sum(Race_Asian_Percent) / count,
+    hispanic_pct = sum(Race_Hispanic_Percent) / count,
+    poverty_pct = sum(Poverty_Percent) / count,
+    not_poverty_pct = sum(Not_Poverty_Percent) / count
+  )
+
 ```
 
 You can add options to executable code like this
