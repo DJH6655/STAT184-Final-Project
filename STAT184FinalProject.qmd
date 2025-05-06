@@ -1,7 +1,7 @@
 ---
 title: "College Major Backgrounds and Effects"
 author: "Dylan Holliday and Max Collins"
-date: "May 5, 2025"
+date: "May 7, 2025"
 date-modified: now
 format: 
   pdf:
@@ -37,6 +37,8 @@ Our analysis will focus on median salary, major categories (majors grouped withi
 library(tidyr)
 library(readr)
 library(dplyr)
+library(rvest)
+library(tidyverse)
 library(ggplot2)
 library(readxl)
 library(janitor)
@@ -45,11 +47,17 @@ library(kableExtra)
 
 #2 Read in earnings data from url, diversity data from xlsx path
 
-recentGrads <- read_csv("https://raw.githubusercontent.com/DJH6655/STAT184-Final-Project/refs/heads/main/recent-grads.csv")
+# Read in income data
+recentGrads <- read_csv(
+  # Separate string for visibility
+  str_c("https://raw.githubusercontent.com/DJH6655",
+        "/STAT184-Final-Project/refs/heads/main/recent-grads.csv"))
 
+# Read in secondary data source
 sexRaceFreqRaw <- read_excel("Tab1_FOD (1).xlsx")
 
-#3 Clean Excel Data, Selecting necessary attributes
+
+#3 Clean Excel Data, Selecting necessary attributes and renaming them
 sexRaceFrequency <- sexRaceFreqRaw %>% 
   slice_head(n=41) %>% 
   slice_tail(n = 37) %>% 
@@ -57,7 +65,6 @@ sexRaceFrequency <- sexRaceFreqRaw %>%
   rename(
     Major = 1,
     Total = 2,
-    ##Rename to count due to mutate operation
     Race_White_Percent = 3, 
     Race_Black_Percent = 4,
     Race_Asian_Percent = 5,
@@ -96,6 +103,7 @@ joinedTables <-
     by = join_by(Major == Major)
   ) 
 
+# Make a Summary Table
 majorCategories <- joinedTables %>% 
   group_by(Major_category) %>%
   summarize(
@@ -104,10 +112,10 @@ majorCategories <- joinedTables %>%
     avg_med_sal = mean(Median),
     avg_P75 = mean(P75th),
     avg_umemp_rate = mean(Unemployment_rate),
-    white = floor(mean(Race_White_Count)),
-    black = floor(mean(Race_Black_Count)),
-    asian = floor(mean(Race_Asian_Count)),
-    hispanic = floor(mean(Race_Hispanic_Count)),
+    White = floor(mean(Race_White_Count)),
+    Black = floor(mean(Race_Black_Count)),
+    Asian = floor(mean(Race_Asian_Count)),
+    Hispanic = floor(mean(Race_Hispanic_Count)),
     poverty = floor(mean(Poverty_Count)),
     not_poverty = floor(mean(Not_Poverty_Count))
   )
@@ -116,7 +124,18 @@ majorCategories <- joinedTables %>%
 
 ```
 
-You can add options to executable code like this
+## An Analysis of Race Frequency among Major Categories
+
+This analysis will try to determine if there is a statistically significant bias towards people of white ethnicity in a college setting by comparing the collegiate white race percentage with the national white race percentage. We will be conducting a One Sample Proportion Z-Test to make our conclusion.
+
+**Hypotheses**:  
+
+  $H_0$ : $p = p_0$ There is no significant difference in collegiate race proportions and national (population) race proportions.  
+  $H_a$ : $p \ne p_0)$ There exists a significant difference in proportions of race between college students and the national (population) average.  
+  
+To start, we must find the proportion of white college students. The proportion lies in the table below.
+
+Below is a table depicting the percent frequency of each race in each major category as a portion of the sample population.
 
 ```{r}
 ### Make a Race/Major Category frequency table
@@ -148,15 +167,28 @@ raceFreq %>%
   kable(
     caption = "Frequency of Each Major Category Based on Race",
     booktabs = TRUE,
-    align = "l"
-  ) %>%
-  kableExtra::kable_styling(
-    bootstrap_options = c("striped", "condensed"),
-    font_size = 12
+    align = "lrrrrr"
   ) 
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+As one can tell, there is a clear disparity between the proportion of white students and the proportion of students of different races, with the total percentage of white college students being 67.25%. Another noteworthy finding is that 20.49% of Asian students have a major in the Computers and Mathematics Category, as opposed to just 8.13% of the whole collegiate population. This percentage can be obtained by taking the 2.5% of Asians in Computers & Mathematics and divide by the 12.2% of total Asian students in the collegiate population. This statistic tells us that Asians are more likely to have a major in Computers and Mathematics than the college population as a whole. Even still, everyone should avoid stereotyping so that all people have free choice to study whatever they choose.  
+
+Back to our analysis, the college proportion of white students is 67.25%. Let's call this $p_0$. According to the US Census, 63.44% of the total United States population identifies as white. Let's call this $p$. According to the One Sample Proportion Z-Test:  
+  
+  $$z = \frac{p-p_0}{\sqrt{p_0(1-p_0)/n}}$$  
+  
+Where $p_0$ is the white college students proportion, $p$ is the total white US population proportion, and $n$ is the total number of college students in the sample:  
+ `r sum(majorCategories['count'])`
+ 
+As such, our z value is calculated to be:
+
+$$ z = -471.27 $$
+Since our z value is so large, our p-value is 0, leading us to reject our null hypothesis. This leads us to believe there is a statistical difference in the proportion of white college students and the proportion of the US Population that is white.
+
+# Conclusions
+
+# References
+https://www.neilsberg.com/insights/united-states-population-by-race/#:~:text=The%20percent%20distribution%20of%20United%20States%20population%20by,are%20some%20other%20race%20and%2010.71%25%20are%20multiracial.
 
 ```{r codeAppend, ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
 ```
