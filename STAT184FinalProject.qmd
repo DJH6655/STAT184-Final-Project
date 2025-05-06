@@ -26,11 +26,13 @@ Our first question we will explore is whether there is a significant difference 
 
 # Provenance of Our Data
 
+Our primary data source was found on Kaggle. Kaggle is a data science focused website that contains many data sets that learners can find and use. The author of this particular data set is Bojan Tunguz. The data is described as being from the American Community Survey 2010-2012 Public Use Microdata Series. The data set contains multiple data frames, but our study will focus upon the recent-grads data, which contains information on majors, earnings post-graduation, employment, employment type, major categories, and the amount of people in each major. Since these data are from a specific survey, they have not been updated and will not. The data, however, still maintains integrity following that all these majors still exist and no abnormal world events would lead us to deny insight from the data. Our analysis here will mainly focus on median salary, major categories (majors grouped within a similar field), unemployment rate, and total amount of graduates.  
+
+Our secondary data source is from the 2022 American Community Survey, from the U.S. Census Bureau. This data contains information on popular majors and the percentage of each race and sex, as well as age and income categories. With all this said, our research with this data set will solely focus on the race proportions and poverty proportions. These data are not to be updated since they are also from a specific survey. Nevertheless, the data provides useful insights on socioeconomic background's role in college majors.
+
 # FAIR and CARE Principles
 
-# Attribute Focus
 
-Our analysis will focus on median salary, major categories (majors grouped within a similar field), unemployment rate, total amount of graduates, and the sex and race backgrounds of certain majors.
 
 # Analyses
 
@@ -119,11 +121,11 @@ majorCategories <- joinedTables %>%
     "Average Median Salary" = mean(Median),
     "Average Third Quartile" = mean(P75th),
     "Average Unemployment Rate" = mean(Unemployment_rate),
-    "White Count" = floor(mean(Race_White_Count)),
-    "Black Count" = floor(mean(Race_Black_Count)),
-    "Asian Count" = floor(mean(Race_Asian_Count)),
-    "Hispanic Count" = floor(mean(Race_Hispanic_Count)),
-    "Other Count" = floor(mean(Race_OtherMulti_Count)),
+    "White" = floor(mean(Race_White_Count)),
+    "Black" = floor(mean(Race_Black_Count)),
+    "Asian" = floor(mean(Race_Asian_Count)),
+    "Hispanic" = floor(mean(Race_Hispanic_Count)),
+    "Other" = floor(mean(Race_OtherMulti_Count)),
     "Poverty Count" = floor(mean(Poverty_Count))
   )
 
@@ -138,7 +140,7 @@ This analysis will try to determine if there is a statistically significant bias
 **Hypotheses**:  
 
   $H_0$ : $p = p_0$ There is no significant difference in the white collegiate race proportion and national (population) white race proportion.  
-  $H_a$ : $p \ne p_0$ There exists a significant difference in the proportion of white people between college students and the national (population) average.  
+  $H_a$ : $p \ne p_0$ There exists a significant difference in the proportion of white people between college students and the national (population).  
   
 To start, we must find the proportion of white college students. The proportion lies in the table below.
 
