@@ -342,6 +342,25 @@ ggplot(majorCategories) +
 )
 ```
 
+``` {r}
+ggplot(majorCategories)+
+  aes(
+    x = `Average Unemployment Rate`,
+    y = Major_category,
+    color = Major_category
+  )+
+  geom_point(size = 1)+
+  labs(
+    x = "Unemployment Rate",
+    y = "Major Category",
+    title = "Unemployment Rate for College Graduates by Major Category"
+  )+ theme_minimal()+
+  theme(
+    plot.title.position = "plot",
+    legend.position = "none"
+  )
+```
+
 # Conclusions
 
 # References
