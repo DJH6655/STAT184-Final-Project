@@ -202,21 +202,20 @@ Since our z value is so large (in absolute value), our p-value is most nearly 0,
 #1 Select data frame to make graph from and pick which variables correspond to each axis
 ggplot(majorCategories) +
   aes(
-    x = Major_category,
-    y = `Average Median Salary`,
+    x = `Average Median Salary`,
+    y = Major_category,
     fill = Major_category #gives each a different color
   ) + # creates bar graph
   geom_bar(stat = "summary", fun = "sum") +
   labs(#adds axis titles and graph title
-    x = "Major Category",
-    y = "Average Median Salaey",
+    x = "Average Median Salary",
+    y = "Major Category",
     title = "Average Median Salary by Major Category"
   )+
   theme_minimal()+
   theme(#eliminates unneccesary space from legend
     legend.position = "none"
-  )+
-  coord_flip()#enhances readability of major category axis labels
+  )
 ```
 
 ``` {r}
