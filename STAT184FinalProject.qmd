@@ -314,9 +314,7 @@ ggplot(majorCategories) +
   )+
   theme_minimal()+
   theme(
-    plot.title.position = "plot",
-    legend.position = "bottom",
-    legend.box = "horizontal"
+    plot.title.position = "plot"
 )
 ```
 
