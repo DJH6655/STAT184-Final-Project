@@ -9,6 +9,7 @@ format:
     number-sections: false
     toc: false
     fig-align: center
+    fig-height: 5
     cap-location: top
     link-external-newwindow: true
 execute: 
@@ -174,12 +175,12 @@ At first sight, one can see that engineering has quite a high salary for all qua
 
 It is important to note, assuming engineering is sample 1 and business is sample 2:
 
-$\bar{x}_1 = 57383$
-$s_1 = 13626$
-$n_1 = 29$
-$\bar{x}_2 = 43538$
-$s_2 = 7774$
-$n_2 = 13$
+$\bar{x}_1 = 57383$  
+$s_1 = 13626$  
+$n_1 = 29$  
+$\bar{x}_2 = 43538$  
+$s_2 = 7774$  
+$n_2 = 13$  
 
 From these numbers, the $t-value$ can be found to be:
 
@@ -193,7 +194,6 @@ Now that we have this information, let's take a look at the shape of the enginee
 
 ```{r}
 #| fig.cap = "Exploring the Shape of the Engineering Median Salary Distribution"
-
 
 ### Make a box plot depicting engineering salary distribution
 
@@ -237,7 +237,17 @@ withoutOutlier <- engineerStats %>%
 ```
 Although this plot does not seem to have a large skew one way or another, there is a noticeable outlier that lies well beyond the other median salaries. The outlier major would be `{r} highestEarning[[1]]` with a median salary of \$`{r} format(highestMedSalary[[1]], scientific = FALSE, big.mark = ",")`. The adjusted mean of the median salary without the outlier is \$`{r} format(mean(withoutOutlier$Median), scientific = FALSE, big.mark = ",")` while the standard deviation is now \$`{r} format(sd(withoutOutlier$Median), scientific = FALSE, big.mark = ",")`
 
-
+``` {r}
+#| fig.cap = "Median Salary per Engineering Major"
+### Creates a sideways bar chart of Engineering median salaries
+library(ggplot2)
+#1 Select data frame to make graph from and pick which variables correspond to each axis
+ggplot(engineerStats) +
+  aes(x = Major, y = Median) +
+  geom_col(fill = "#4081F6") +
+  coord_flip() +
+  theme_minimal()
+```
 
 
 ## An Analysis of Race Frequency among Major Categories
@@ -303,28 +313,7 @@ As such, our z value is calculated to be:
 $$ z = -84.73 $$
 Since our z value is so large (in absolute value), our p-value is most nearly 0, leading us to reject our null hypothesis. This leads us to believe there is a statistical difference in the proportion of white college students and the proportion of the US Population that is white. There are faults with this analysis, however; since the college data came from the US Census as well, such a large "sample" size would indicate a difference in the smallest of proportions. Therefore, Any insights to be made from this test are rendered insignificant. Conducting tests on a smaller scale (such as a school by school basis) will help individual school leaders find if their school is meeting diversity standards.
 
-``` {r}
-## Creates a sideways bar chart
 
-#1 Select data frame to make graph from and pick which variables correspond to each axis
-ggplot(majorCategories) +
-  aes(
-    x = `Average Median Salary`,
-    y = Major_category,
-    fill = Major_category #gives each a different color
-  ) + # creates bar graph
-  geom_bar(stat = "summary", fun = "sum") +
-  labs(#adds axis titles and graph title
-    x = "Average Median Salary",
-    y = "Major Category",
-    title = "Average Median Salary by Major Category"
-  )+
-  theme_minimal()+
-  theme(#eliminates unneccesary space from legend
-    legend.position = "none",
-    plot.title.position = "plot"
-  )
-```
 
 ``` {r}
 ggplot(majorCategories, aes(y = Major_category))+
@@ -470,7 +459,10 @@ ggplot(majorCategories)+
 
 # Conclusions
 
+Our conclusions are that
+
 # References
+
 Global B2B Market Research & Advisory Solutions. (2025, February 21). *United   States population by Race & Ethnicity - 2025 update*. Neilsberg.
 https://www.neilsberg.com/insights/united-states-population-by-race/#:~:  
 text=The%20percent%20distribution%20of%20United%20States%20population%20by,  
@@ -478,7 +470,7 @@ are%20some%20other%20race%20and%2010.71%25%20are%20multiracial.
 
 Tunguz, B. (2021, April 20). *College majors*. Kaggle. https://www.kaggle.com/datasets/tunguz/college-majors 
 
-U.S. Census Bureau (2022). 
+U.S. Census Bureau (2022). *American Community Survey*. Census.gov. www.census.gov/acs
 
 ```{r codeAppend, ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
 ```
