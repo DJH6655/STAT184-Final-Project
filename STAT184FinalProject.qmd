@@ -220,6 +220,30 @@ ggplot(majorCategories) +
 ```
 
 ``` {r}
+ggplot(majorCategories, aes(y = Major_category))+
+  geom_boxplot(
+    aes(
+      xmin = `Average First Quartile`,
+      xlower = `Average First Quartile`,
+      xmiddle = `Average Median Salary`,
+      xupper = `Average Third Quartile`,
+      xmax = `Average Third Quartile`,
+      fill = Major_category
+    ),
+    stat = "identity"
+  )+
+  labs(
+    x = "Salary",
+    y = "Major Category",
+    title = "Salary Distribution by Major Category"
+  )+ theme_minimal()+
+  theme(
+    plot.title.position = "plot",
+    legend.position = "none"
+  )
+```
+
+``` {r}
 
 ##Creates dot plot that shows the number of graduates from each category by race
 
