@@ -218,13 +218,17 @@ ggplot(engineerStats) +
 
 
 ```{r} 
+### Find out info about the highest earning engineering major
+
+#1 Find Major Name
 highestEarning <- engineerStats %>%
   filter(Median == max(Median)) %>%
   select(Major) 
+#2 Find Major Median Salary
 highestMedSalary <- engineerStats %>%
   filter(Major == highestEarning[[1]]) %>%
   select(Median)
-
+#3 Create table without outlier
 withoutOutlier <- engineerStats %>%  
   filter(Major != 'PETROLEUM ENGINEERING')  
 ```
