@@ -214,7 +214,8 @@ ggplot(majorCategories) +
   )+
   theme_minimal()+
   theme(#eliminates unneccesary space from legend
-    legend.position = "none"
+    legend.position = "none",
+    plot.title.position = "plot"
   )
 ```
 
@@ -242,7 +243,37 @@ ggplot(dotPlot)+
     y = "Major Category",
     title = "Total College Graduates by Major Category and Race"
   )+
-  theme_minimal()
+  theme_minimal()+
+  theme(
+    plot.title.position = "plot"
+  )
+```
+``` {r}
+##Creates dot plot to show the percentages of colege graduates from each race for each major category
+
+#1 Wrangle data to create percentage column that shows percent for each category
+dotPlotPct <- dotPlot %>% 
+  group_by(Race) %>% 
+  mutate (Pct = Count / sum(Count))
+
+#2 Creats dot plot of percent of total gradute from each race per major category
+
+ggplot(dotPlotPct)+
+  aes(
+    x = Pct,
+    y = Major_category,
+    color = Race
+  )+
+  geom_point(size = 2)+
+  labs(
+    x = "Percent of Each Race",
+    y = "Major Category",
+    title = "Percent of College Graduates of Each Race by Major Category"
+  )+
+  theme_minimal()+
+  theme(
+    plot.title.position = "plot"
+  )
 ```
 
 # Conclusions
