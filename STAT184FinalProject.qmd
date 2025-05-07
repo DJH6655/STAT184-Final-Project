@@ -218,6 +218,34 @@ ggplot(majorCategories) +
   )+
   coord_flip()#enhances readability of major category axis labels
 ```
+
+``` {r}
+
+##Creates dot plot that shows the number of graduates from each category by race
+
+#1 Select race attributes and pivot longer to get totals
+
+dotPlot <- majorCategories %>%
+  select(1,7,8,9,10,11) %>%
+  pivot_longer(!Major_category, names_to = "Race", values_to = "Count")
+
+#2 Creates dot plot of total gradutes by category and race
+
+ggplot(dotPlot)+
+  aes(
+    x = Count,
+    y = Major_category,
+    color = Race#makes each race a different color
+  )+
+  geom_point(size = 2)+#increased size to enahce readability
+  labs(
+    x = "Count",
+    y = "Major Category",
+    title = "Total College Graduates by Major Category and Race"
+  )+
+  theme_minimal()
+```
+
 # Conclusions
 
 # References
