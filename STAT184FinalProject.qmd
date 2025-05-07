@@ -275,6 +275,28 @@ ggplot(dotPlotPct)+
     plot.title.position = "plot"
   )
 ```
+``` {r}
+## Creates dot plot that shows how many college graduates from each major category are in poverty
+
+#1 Creates dot plot
+ggplot(majorCategories) +
+  aes(
+    x = `Poverty Count`,
+    y = Major_category,
+    color = Major_category
+  ) +
+  geom_point(size = 3) +
+  labs(
+    x = "Total in Poverty",
+    y = "Major Category",
+    title = "Total College Graduates in Poverty by Major Category"
+  )+
+  theme_minimal()+
+  theme(
+    plot.title.position = "plot",#makes title formatted properly in qmd
+    legend.position = "none"
+  )
+```
 
 # Conclusions
 
