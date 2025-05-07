@@ -228,7 +228,7 @@ highestMedSalary <- engineerStats %>%
 withoutOutlier <- engineerStats %>%  
   filter(Major != 'PETROLEUM ENGINEERING')  
 ```
-Although this plot does not seem to have a large skew one way or another, there is a noticeable outlier that lies well beyond the other median salaries. The outlier major would be `{r} highestEarning[[1]]` with a median salary of `{r} highestMedSalary[[1]]`. The adjusted mean of the median salary without the outlier is `{r} mean(withoutOutlier$Median)` while the standard deviation is now `{r} sd(withoutOutlier$Median)`
+Although this plot does not seem to have a large skew one way or another, there is a noticeable outlier that lies well beyond the other median salaries. The outlier major would be `{r} highestEarning[[1]]` with a median salary of \$`{r} format(highestMedSalary[[1]], scientific = FALSE, big.mark = ",")`. The adjusted mean of the median salary without the outlier is \$`{r} format(mean(withoutOutlier$Median), scientific = FALSE, big.mark = ",")` while the standard deviation is now \$`{r} format(sd(withoutOutlier$Median), scientific = FALSE, big.mark = ",")`
 
 
 
