@@ -468,7 +468,14 @@ ggplot(majorCategories)+
 # Conclusions
 
 # References
-https://www.neilsberg.com/insights/united-states-population-by-race/#:~:text=The%20percent%20distribution%20of%20United%20States%20population%20by,are%20some%20other%20race%20and%2010.71%25%20are%20multiracial.
+Global B2B Market Research & Advisory Solutions. (2025, February 21). *United   States population by Race & Ethnicity - 2025 update*. Neilsberg.
+https://www.neilsberg.com/insights/united-states-population-by-race/#:~:  
+text=The%20percent%20distribution%20of%20United%20States%20population%20by,  
+are%20some%20other%20race%20and%2010.71%25%20are%20multiracial. 
+
+Tunguz, B. (2021, April 20). *College majors*. Kaggle. https://www.kaggle.com/datasets/tunguz/college-majors 
+
+U.S. Census Bureau (2022). 
 
 ```{r codeAppend, ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
 ```
