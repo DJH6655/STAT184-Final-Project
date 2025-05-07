@@ -22,13 +22,13 @@ Our Research is focused on finding trends and insights from post-secondary major
 
 # Research Questions
 
-Our first question we will explore is whether there is a significant difference in college race proportions compared to the national proportions. To do this, we intend to conduct a one sample proportion test comparing primarily the white proportion of college students to the national to expose a possible bias. 
+We plan to conduct an exploratory data analysis from the information given by our data sets. Our first question we will explore is what is the highest earning major category. We will find the said category and perform a two sample t test to show if the highest earning category is significantly different from the 2nd highest. We then want to know about the distribution of the highest earning major category to see if there is any skew or outliers that would affect the mean. We also inquire whether there is a significant difference in college race proportions compared to the national proportions. To do this, we intend to conduct a one sample proportion test comparing primarily the white proportion of college students to the national to expose a possible bias. 
 
 # Provenance of Our Data
 
-Our primary data source was found on Kaggle. Kaggle is a data science focused website that contains many data sets that learners can find and use. The author of this particular data set is Bojan Tunguz. The data is described as being from the American Community Survey 2010-2012 Public Use Microdata Series. The data set contains multiple data frames, but our study will focus upon the recent-grads data, which contains information on majors, earnings post-graduation, employment, employment type, major categories, and the amount of people in each major. Since these data are from a specific survey, they have not been updated and will not. The data, however, still maintains integrity following that all these majors still exist and no abnormal world events would lead us to deny insight from the data. Our analysis here will mainly focus on median salary, major categories (majors grouped within a similar field), unemployment rate, and total amount of graduates.  
+Our primary data source was found on Kaggle. Kaggle is a data science focused website that contains many data sets that learners can find and use. The author of this particular data set is Bojan Tunguz. The data is described as being from the American Community Survey 2010-2012 Public Use Microdata Series. The data set contains multiple data frames, but our study will focus upon the recent-grads data, where each case represents a unique major. Each case contains information on majors, earnings post-graduation, employment, employment type, major categories, and the amount of people in each major. Since these data are from a specific survey, they have not been updated and will not. The data, however, still maintains integrity following that all these majors still exist and no abnormal world events would lead us to deny insight from the data. Our analysis here will mainly focus on median salary, major categories (majors grouped within a similar field), unemployment rate, and total amount of graduates.  
 
-Our secondary data source is from the 2022 American Community Survey, from the U.S. Census Bureau. This data contains information on popular majors and the percentage of each race and sex, as well as age and income categories. With all this said, our research with this data set will solely focus on the race proportions and poverty proportions. These data are not to be updated since they are also from a specific survey. Nevertheless, the data provides useful insights on socioeconomic background's role in college majors.
+Our secondary data source is from the 2022 American Community Survey, from the U.S. Census Bureau. Each case for this data set is also a major, so that is how we intend to join the data frames together. This data contains information on popular majors and the percentage of each race and sex, as well as age and income categories. With all this said, our research with this data set will solely focus on the race proportions and poverty proportions. These data are not to be updated since they are also from a specific survey. Nevertheless, the data provides useful insights on socioeconomic background's role in college majors.
 
 # FAIR and CARE Principles
 
@@ -139,7 +139,9 @@ Below is an initial summary table that depicts the average salary of each quarti
 
 ```{r}
 #| tbl-colwidths: [75,25]
+
 ### Provides a Table on major category summary statistics
+
 salarySummary <- recentGrads %>%
   filter(Major_category != 'Interdisciplinary') %>%
   group_by(Major_category) %>%
@@ -231,6 +233,7 @@ highestMedSalary <- engineerStats %>%
 #3 Create table without outlier
 withoutOutlier <- engineerStats %>%  
   filter(Major != 'PETROLEUM ENGINEERING')  
+
 ```
 Although this plot does not seem to have a large skew one way or another, there is a noticeable outlier that lies well beyond the other median salaries. The outlier major would be `{r} highestEarning[[1]]` with a median salary of \$`{r} format(highestMedSalary[[1]], scientific = FALSE, big.mark = ",")`. The adjusted mean of the median salary without the outlier is \$`{r} format(mean(withoutOutlier$Median), scientific = FALSE, big.mark = ",")` while the standard deviation is now \$`{r} format(sd(withoutOutlier$Median), scientific = FALSE, big.mark = ",")`
 
