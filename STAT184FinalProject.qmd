@@ -297,6 +297,28 @@ ggplot(majorCategories) +
     legend.position = "none"
   )
 ```
+```{r}
+#Creates dot plot 
+ggplot(majorCategories) +
+  aes(
+    x = `Poverty Count` / Count,
+    y = `Average Median Salary`,
+    colour = Major_category
+  ) +
+  geom_point(size = 3) +
+  labs(
+    x = "Percentage in Poverty",
+    y = "Average Median Salary",
+    color = "Major Category",
+    title = "Total College Graduates in Poverty by Major Category"
+  )+
+  theme_minimal()+
+  theme(
+    plot.title.position = "plot",
+    legend.position = "bottom",
+    legend.box = "horizontal"
+)
+```
 
 # Conclusions
 
