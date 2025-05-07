@@ -136,7 +136,9 @@ majorCategories <- joinedTables %>%
 
 Below is an initial summary table that depicts the average salary of each quartiles 1-3, as well as the standard deviation of the median.
 
+
 ```{r}
+#| tbl-colwidths: [75,25]
 ### Provides a Table on major category summary statistics
 salarySummary <- recentGrads %>%
   filter(Major_category != 'Interdisciplinary') %>%
@@ -151,14 +153,14 @@ salarySummary <- recentGrads %>%
 salarySummary %>%
   kable(
     caption = "Salary Summary Table per Major Category",
-    format = "pipe",
+    format = "simple",
     booktabs = TRUE,
-    align = "lrrrr",
+    align = "lrrrrr",
     format.args = list(big.mark = ',', digits = 2)
   ) %>%
   kableExtra::kable_styling(
     bootstrap_options = c("striped", "condensed"),
-    font_size = 12
+    font_size = 10,
   ) 
   
 ```
@@ -184,6 +186,51 @@ And the $p-value$ is found to be:
 
 $$p = 0.0002$$
 Because p is less than 0.05, the null hypothesis is rejected. Therefore, there is reason to believe that the median salary of engineering majors differs from that of business majors.
+
+Now that we have this information, let's take a look at the shape of the engineering median salary data to search for outliers and any skew. See below.
+
+```{r}
+#| fig.cap = "Exploring the Shape of the Engineering Median Salary Distribution"
+
+
+### Make a box plot depicting engineering salary distribution
+
+#1 Make the necessary table, filters only engineering majors
+engineerStats <- recentGrads %>%
+  filter(Major_category == 'Engineering')
+
+ggplot(engineerStats) +
+  aes(x = Median, y = "" ) +
+  geom_boxplot(fill = "#FF8C00") +
+  labs(
+    x = "Median Salary (USD)",
+    y = "",
+    title = "Engineering Median Salary Distribution",
+  ) +
+  scale_x_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 12L),
+    axis.text.x = element_text(size = 12L)
+  )
+
+```
+
+
+```{r} 
+highestEarning <- engineerStats %>%
+  filter(Median == max(Median)) %>%
+  select(Major) 
+highestMedSalary <- engineerStats %>%
+  filter(Major == highestEarning[[1]]) %>%
+  select(Median)
+
+withoutOutlier <- engineerStats %>%  
+  filter(Major != 'PETROLEUM ENGINEERING')  
+```
+Although this plot does not seem to have a large skew one way or another, there is a noticeable outlier that lies well beyond the other median salaries. The outlier major would be `{r} highestEarning[[1]]` with a median salary of `{r} highestMedSalary[[1]]`. The adjusted mean of the median salary without the outlier is `{r} mean(withoutOutlier$Median)` while the standard deviation is now `{r} sd(withoutOutlier$Median)`
+
+
 
 
 ## An Analysis of Race Frequency among Major Categories
