@@ -196,6 +196,28 @@ As such, our z value is calculated to be:
 $$ z = -84.73 $$
 Since our z value is so large (in absolute value), our p-value is most nearly 0, leading us to reject our null hypothesis. This leads us to believe there is a statistical difference in the proportion of white college students and the proportion of the US Population that is white. There are faults with this analysis, however; since the college data came from the US Census as well, such a large "sample" size would indicate a difference in the smallest of proportions. Therefore, Any insights to be made from this test are rendered insignificant. Conducting tests on a smaller scale (such as a school by school basis) will help individual school leaders find if their school is meeting diversity standards.
 
+``` {r}
+## Creates a sideways bar chart
+
+#1 Select data frame to make graph from and pick which variables correspond to each axis
+ggplot(majorCategories) +
+  aes(
+    x = Major_category,
+    y = `Average Median Salary`,
+    fill = Major_category #gives each a different color
+  ) + # creates bar graph
+  geom_bar(stat = "summary", fun = "sum") +
+  labs(#adds axis titles and graph title
+    x = "Major Category",
+    y = "Average Median Salaey",
+    title = "Average Median Salary by Major Category"
+  )+
+  theme_minimal()+
+  theme(#eliminates unneccesary space from legend
+    legend.position = "none"
+  )+
+  coord_flip()#enhances readability of major category axis labels
+```
 # Conclusions
 
 # References
