@@ -23,7 +23,7 @@ Our Research is focused on finding trends and insights from post-secondary major
 
 # Research Questions
 
-We plan to conduct an exploratory data analysis from the information given by our data sets. Our first question we will explore is what is the highest earning major category. We will find the said category and perform a two sample t test to show if the highest earning category is significantly different from the 2nd highest. We then want to know about the distribution of the highest earning major category to see if there is any skew or outliers that would affect the mean. We also inquire whether there is a significant difference in college race proportions compared to the national proportions. To do this, we intend to conduct a one sample proportion test comparing primarily the white proportion of college students to the national to expose a possible bias. 
+We plan to conduct an exploratory data analysis from the information given by our data sets. Our first question we will explore is what is the highest earning major category. We will find the said category and perform a two sample t test to show if the highest earning category is significantly different from the 2nd highest. We then want to know about the distribution of the highest earning major category to see if there is any skew or outliers that would affect the mean. We also inquire whether there is a significant difference in college race proportions compared to the national proportions. To do this, we intend to conduct a one sample proportion test comparing primarily the white proportion of college students to the national to expose a possible bias. And finally, we will explore how the percentage of college graduates in each major category by race is affected by the average median salary. This will show if there are any discrepancies in the opportunity to be in these high-earning fields. To do this, we will do separate linear regression models to see the R-Squared between the variables to see how well participation in a major category correlates to median salary by race. 
 
 # Provenance of Our Data
 
@@ -35,7 +35,8 @@ Our secondary data source is from the 2022 American Community Survey, from the U
 
 The data that we used through this project satisfies the FAIR principles of findability, accessibility, interoperability, and reusability. The first dataset we found came from a publicly accessible repository from FiveThirtyEight, a reputable source on data analysis and reporting, and the second dataset we used came from the publicly accessible US Census database. These data sets can be accessed by anyone on the internet as they have been freely provided by the US Census Bureau and FiveThirtyEight. The data was also in compatible formats such as .csv files and .xlsx files, and all languages used throughout our report and the wrangling and visualization process are formal and applicable to the analysis we conducted. And finally, the data we used contains plenty of relevant pieces of economic and socioeconomic data, which, as outlined above, have sufficient provenance. 
 
-Our data also satisfies the CARE principles of collective benefit, authority to control, responsibility, and ethics. These standards are especially relevant to our project as we are working with socioeconomic data that could potentially be sensitive to some people. Our analysis aims to discuss socioeconomic impacts and trends associated with a choice in college major and give people insight into our potential findings on their impact on economic outcomes. The data we used also came from the US Census, which occurs every 10 years and people willingly participate in. We are trying to use this data to expand people’s understanding on how college major choices relate to income, poverty, and unemployment. And finally, we are not trying to do any harm through this project and are doing this to explore trends that may allow people to make better decisions for their future.
+Our data also satisfies the CARE principles of collective benefit, authority to control, responsibility, and ethics. These standards are especially relevant to our project as we are working with socioeconomic data that could potentially be sensitive to some people. Our analysis aims to discuss socioeconomic impacts and trends associated with a choice in college major and give people insight into our potential findings on their impact on economic outcomes. The data we used also came from the US Census, which occurs every 10 years and people willingly participate in. We are trying to use this data to expand people’s understanding on how college major choices relate to income, poverty, and unemployment. And finally, we are not trying to do any harm through this project and are doing this to explore trends that may allow people to make better decisions for their future. 
+
 
 # Analyses
 
@@ -131,7 +132,6 @@ majorCategories <- joinedTables %>%
     "Other" = floor(mean(Race_OtherMulti_Count)),
     "Poverty Count" = floor(mean(Poverty_Count))
   )
-
 
 
 ```
@@ -251,6 +251,8 @@ ggplot(engineerStats) +
   theme_minimal()
 ```
 
+Here is another visualization showing just how significant the disparity between earnings for petroleum engineering majors is compared to other engineering graduates. In a field full of high earners, petroleum engineers make far more than the others, in some cases making close to double what other engineering majors make. 
+
 
 ## An Analysis of Race Frequency among Major Categories
 
@@ -265,7 +267,9 @@ To start, we must find the proportion of white college students. The proportion 
 
 Below is a table depicting the percent frequency of each race in each major category as a portion of the sample population.
 
+
 ```{r}
+#| fig.cap = "Frequency of Each Major Category Based on Race"
 ### Make a Race/Major Category frequency table
 
 #1 Select Necessary attributes and pivot longer
@@ -315,58 +319,86 @@ As such, our z value is calculated to be:
 $$ z = -84.73 $$
 Since our z value is so large (in absolute value), our p-value is most nearly 0, leading us to reject our null hypothesis. This leads us to believe there is a statistical difference in the proportion of white college students and the proportion of the US Population that is white. There are faults with this analysis, however; since the college data came from the US Census as well, such a large "sample" size would indicate a difference in the smallest of proportions. Therefore, Any insights to be made from this test are rendered insignificant. Conducting tests on a smaller scale (such as a school by school basis) will help individual school leaders find if their school is meeting diversity standards.
 
+## Analysis of Percentage of Graduates and Average Median Salary by Major Category
+
+For this analysis, we took the percentage of college graduates who graduated with a degree in each major category within each race and plotted their relation to the average median salary. This shows the relative frequency of a person of each race to graduation with a degree in a certain category of major when grouped with those of their same race, not the whole sample size of all races. We made linear regressions of people with the races of white, black, asian, and hispanic for this part of our research and calculated the R-Squared of each regression to find how much of the variance in percentage of people within each race choosing a certain category of major can be explained by the average median salary.
+
+To find what differences in the R-Squared coefficients exist between racial groups, we'll examine our linear regressions. 
+
 ```{r}
+
+### Wrangle data to make dot plots and create dot plot for white graduates
+
+#1Wrangle data, create percent variable to be used in regression, and filter by race
 dotPlotRacePrep <- majorCategories %>%
   select(1,4,7,8,9,10,11) %>%
-  pivot_longer(
+  pivot_longer(#makes it so each major category is split by race of graduates
     cols = -c(Major_category, `Average Median Salary`),
     names_to = "Race", 
     values_to = "Count"
   ) %>% 
-  group_by(Race) %>% 
-  mutate (Pct = Count / sum(Count))
+  group_by(Race) %>%
+  mutate (Pct = Count / sum(Count))#creates new column
 
 dotPlotWhite <- dotPlotRacePrep %>% 
   filter(Race == "White")
+#seperated to fit figure caption
+```
 
+```{r}
+#| fig.cap = "Linear Regression Dot Plot and Model of Percentage of White College Graduates by Average Median Salary"
+#2 Creates dot plot 
 ggplot(dotPlotWhite)+
   aes(
-    x = Count,
-    y = `Average Median Salary`
+    x = `Average Median Salary`,
+    y = Pct
   ) +
   geom_point(size = 3) +
-  geom_smooth(method = "lm", se = FALSE)+
+  geom_smooth(method = "lm", se = FALSE)+#makes line of best fit
   labs(
-    x = "Percent of Total Gradutes",
-    y = "Average Median Salary",
-    title = "Percent of Total White Graduates by Average Median Salary"
+    x = "Average Median Salary",
+    y = "Percent of Total Graduates",
   )+
-  theme_minimal()+
-  theme(
-    plot.title.position = "plot"
-  )
+  theme_minimal()
 
+#3 Creates linear regression for average median salary and percent of graduates
 rSquareWhite<- lm(
   formula = Pct ~ `Average Median Salary`,
   data = dotPlotWhite
 )
 
+#4 Put summary into pdf
 summary(rSquareWhite)
 
+```
 
+With this first regression, we can see that the percentage of total white graduates from any given major category has almost no correlation to the average median salary. The R-Squared for this regression was only 0.006, which is less than 1% of the variance being described by the relationship between the two variables. This indicates that the average median salary is not a good predictor of what percentage of white graduates will obtain a certain category of degree.
+
+
+```{r}
+
+#Makes another linear regression model, this time for black graduates
+
+#1 Filter out data by race
 dotPlotBlack <- dotPlotRacePrep %>% 
   filter(Race == "Black")
 
+#Same as before and same for rest of linear regressions
+```
+
+```{r}
+#| fig.cap = "Linear Regression Dot Plot and Model of Black College Graduates by Average Median Salary"
+#2 Creates dot plot 
 ggplot(dotPlotBlack)+
   aes(
-    x = Count,
-    y = `Average Median Salary`
+    x = `Average Median Salary`,
+    y = Pct
   ) +
   geom_point(size = 3) +
   geom_smooth(method = "lm", se = FALSE)+
   labs(
-    x = "Percent of Total Gradutes",
-    y = "Average Median Salary",
+    x = "Average Median Salary",
+    y = "Percent of Total Graduates",
     title = "Percent of Total Black Graduates by Average Median Salary"
   )+
   theme_minimal()+
@@ -374,26 +406,40 @@ ggplot(dotPlotBlack)+
     plot.title.position = "plot"
   )
 
+#3 Creates linear regression for average median salary and percent of graduates
 rSquareBlack<- lm(
   formula = Pct ~ `Average Median Salary`,
   data = dotPlotBlack
 )
 
+#4 Put summary into pdf
 summary(rSquareBlack)
+```
 
+And yet again, with this regression, there is almost no correlation between average median salary and the percentage of black college graduates obtaining a certain category of degree. The resulting R-Squared is 0.005, which is lower than for white graduates, but such a low number that we can't make a determination from it. 
+
+```{r}
+
+#Makes another linear regression model, this time for asian graduates
+
+#1 Filter out data by race
 dotPlotAsian <- dotPlotRacePrep %>% 
   filter(Race == "Asian")
+```
 
+```{r}
+#| fig.cap = "Linear Regression Dot Plot and Model of Asian College Graduates by Average Median Salary"
+#2 Creates dot plot 
 ggplot(dotPlotAsian)+
   aes(
-    x = Count,
-    y = `Average Median Salary`
+    x = `Average Median Salary`,
+    y = Pct
   ) +
   geom_point(size = 3) +
   geom_smooth(method = "lm", se = FALSE)+
   labs(
-    x = "Percent of Total Gradutes",
-    y = "Average Median Salary",
+    x = "Average Median Salary",
+    y = "Percent of Total Graduates",
     title = "Percent of Total Asian Graduates by Average Median Salary"
   )+
   theme_minimal()+
@@ -401,26 +447,39 @@ ggplot(dotPlotAsian)+
     plot.title.position = "plot"
   )
 
+#3 Creates linear regression for average median salary and percent of graduates
 rSquareAsian<- lm(
   formula = Pct ~ `Average Median Salary`,
   data = dotPlotAsian
 )
 
+#4 Put summary into pdf
 summary(rSquareAsian)
+```
 
+For the first time, we see a clear correlation between average median salary and percentage of graduates from a particular race obtaining a degree in that category. Not only is the apparent through the R-Squared of 0.542, but the visual trend is far more obvious than any regression before it. This shows an almost undeniable correlation between the two variables.
+
+```{r}
+#Makes another linear regression model, this time for Hispanic graduates
+
+#1 Filter out data by race
 dotPlotHispanic <- dotPlotRacePrep %>% 
   filter(Race == "Hispanic")
+```
 
+```{r}
+#| fig.cap = "Linear Regression Dot Plot and Model of Hispanic College Graduates by Average Median Salary"
+#2 Creates dot plot 
 ggplot(dotPlotHispanic)+
   aes(
-    x = Count,
-    y = `Average Median Salary`
+    x = `Average Median Salary`,
+    y = Pct
   ) +
   geom_point(size = 3) +
   geom_smooth(method = "lm", se = FALSE)+
   labs(
-    x = "Percent of Total Gradutes",
-    y = "Average Median Salary",
+    x = "Average Median Salary",
+    y = "Percent of Total Graduates",
     title = "Percent of Total Hispanic Graduates by Average Median Salary"
   )+
   theme_minimal()+
@@ -428,18 +487,35 @@ ggplot(dotPlotHispanic)+
     plot.title.position = "plot"
   )
 
+#3 Creates linear regression for average median salary and percent of graduates
 rSquareHispanic<- lm(
   formula = Pct ~ `Average Median Salary`,
   data = dotPlotHispanic
 )
 
+#4 Put summary into pdf
 summary(rSquareHispanic)
 ```
 
+To wrap it up, we have yet another graph with almost no correlation. The R-squared for this regression model for Hispanic students was a mere 0.007. There is pretty much no evidence to say that the major they are graduating with is related to how much the average median salary of that category of graduates is.
+
+
+
+
+Based solely on the logic that people would be attracted to more lucrative degrees, we assumed that we would examine a positive relationship between these two variables throughout the different races, but this trend was only shown amongst Asian graduates. This also still could be a case of systemic barriers to certain high-earning degrees and jobs, but the trends among the group of white graduates that have not had to deal with the same racial oppression in this country being almost identical to black and Hispanic graduates lessens that theory. 
+However, with our last analysis showing that white students make up a larger portion of the college graduating population than they do the total population, it is still entirely plausible that a more thorough analysis would uncover some systemic barriers to these higher degrees. Perhaps if we even just showed how the total graduations compared to the population at large, but that is beyond the scope of this study.
 
 # Conclusions
 
-Our conclusions are that
+In this data analysis of the trends related to socioeconomic status and economic factors relating to college majors, we made many interesting findings.
+
+In our first research question, we uncovered that engineering majors are the highest earning major category by average median salary and have a statistically significant difference in average median salary compared to the second highest earning category. Engineers also had a significant outlier, with Petroleum engineering graduates making over $20,000 more than the second-highest earning engineering major.
+
+In our second research question, our data analysis uncovered that there is a statistically significantly higher percentage of white college students than that of the overall national population. This shows a potential bias in college opportunities for white people compared to other races. However, faults in our study make it so we can't draw any real conclusions from this data.
+
+And finally, our last research question tried to find how the average median salary affected the percentage of college graduates per race for a given major category. Our linear regressions revealed next to no correlation for every race, except for Asian graduates, who had an R-Squared of 0.542. While this may lead some to point towards there not being systemic barriers to these degrees for certain groups of people, our findings from our previous question directly refute those assumptions. 
+
+Overall, our findings show that patterns between major choices and socioeconomic factors aren't incredibly different from overall national patterns.
 
 # References
 
