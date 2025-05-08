@@ -33,7 +33,9 @@ Our secondary data source is from the 2022 American Community Survey, from the U
 
 # FAIR and CARE Principles
 
+The data that we used through this project satisfies the FAIR principles of findability, accessibility, interoperability, and reusability. The first dataset we found came from a publicly accessible repository from FiveThirtyEight, a reputable source on data analysis and reporting, and the second dataset we used came from the publicly accessible US Census database. These data sets can be accessed by anyone on the internet as they have been freely provided by the US Census Bureau and FiveThirtyEight. The data was also in compatible formats such as .csv files and .xlsx files, and all languages used throughout our report and the wrangling and visualization process are formal and applicable to the analysis we conducted. And finally, the data we used contains plenty of relevant pieces of economic and socioeconomic data, which, as outlined above, have sufficient provenance. 
 
+Our data also satisfies the CARE principles of collective benefit, authority to control, responsibility, and ethics. These standards are especially relevant to our project as we are working with socioeconomic data that could potentially be sensitive to some people. Our analysis aims to discuss socioeconomic impacts and trends associated with a choice in college major and give people insight into our potential findings on their impact on economic outcomes. The data we used also came from the US Census, which occurs every 10 years and people willingly participate in. We are trying to use this data to expand people’s understanding on how college major choices relate to income, poverty, and unemployment. And finally, we are not trying to do any harm through this project and are doing this to explore trends that may allow people to make better decisions for their future.
 
 # Analyses
 
