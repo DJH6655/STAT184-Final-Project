@@ -1,22 +1,21 @@
 # College Major Backgrounds and Effects
 
-Write a 1-2 sentences that quickly and clearly convey what your repo is for.
+This repo is for Dylan Holliday's and Max Collins' final project for Stat 184. Our project goes over the trends and insights from post-secondary majors: how one’s socioeconomic status plays a role in their major, as well as their major’s effect on their income after graduation.
 
 ## Overview
 
-Expand on those introductory sentences with a brief but informative description of your project's purpose and goals. This section should help visitors decide whether they should dig deeper into your repo/project.
-
-### Interesting Insight
-
-This is optional but highly recommended. You'll include one interesting insight from your project as part of the README. This insight is most effective when you include a visual. Keep in mind that this visual must be included as an image file (e.g., JPG, PNG, etc.). You can export plots created with `{ggplot2}` by using the function `ggsave`.
+We want to explore these relationships through a series of research questions. These questions include, "What is the highest earning major?", "Are proportions of the race of college graduates different than overall racial proportions throughout the country?", and, "How does the average median salary affect graduation from certain major categories amongst racial groups?"
 
 ## Repo Structure
 
-Use this section to explain the structure of your repo. This should help visitors quickly figure out where they should look to find certain elements. Further, you can use this space to highlight and briefly explain important/key files in the repo.
+All .csv from this repo are the files that we obtained from FiveThirtyEight's free online repo about college major statistics, and the .xlsx is from the US Census webiste and is ebing used as our secondary data source. Some of files in this repo, such as he project guidelines file, came from the original repo we copied for this project. Finally, the most important files are our .qmd file that eventually became our .pdf final file that we submitted for our final project. That .qmd file had by far the most commits on it of any of our files as it contained the whole sum of work we did on our final project. 
 
 ## Data Sources and Acknowledgements
 
-Be sure to list where you got any data used within the project. Be sure to acknowledge any one whose work or elements you're drawing upon.
+Here are all of our data sources used within this project.
+
+Global B2B Market Research & Advisory Solutions. (2025, February 21).United States popula-tion by Race & Ethnicity - 2025 update. Neilsberg. https://www.neilsberg.com/insights/united-states-population-by-race/#:~:text=The%20percent%20distribution%20of%20United%20States%20population%20by,are%20some%20other%20race%20and%2010.71%25%20are%20multiracial.Tunguz, B. (2021, April 20).College majors. Kaggle. https://www.kaggle.com/datasets/tunguz/college-majorsU.S. Census Bureau (2022).American Community Survey. Census.gov. www.census.gov/acs
+
 
 ## Authors
 
